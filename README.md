@@ -1,2 +1,3 @@
 # linux-configs
-# install --> run Makefile in each directory to copy to ${HOME}
+# install
+	Run Makefile in each directory to copy to ${HOME}
