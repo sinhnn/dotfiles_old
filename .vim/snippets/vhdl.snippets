@@ -1,0 +1,70 @@
+snippet entity
+	entity ${1: ENTITY} is
+	end entity $1;
+snippet port
+	port (
+		${1:comp},
+	);
+
+snippet generic
+	generic (
+		${1:comp},
+	
+	);
+
+snippet map 
+	map(
+		${1:comp},
+	);
+
+snippet architecture
+	architecture ${1:ENITY}_impl of $1 is
+	${2}
+	begin
+	end architecture $1_impl;
+
+snippet case
+	case ${1:CASE} is
+		${2}
+	end case;
+
+snippet if
+	if ${1:CONDITION} then
+		${2}
+	end if;
+
+snippet elif
+	else if ${1:CONDITION}
+		${2}
+
+snippet else
+	else
+		${1}
+
+snippet lib
+	library ${1:ieee};
+
+snippet use
+	use ${1:USE}.all;
+
+snippet process
+	${1:name}: process
+	end process $1;
+
+
+
+snippet DoxyFile
+	--------------------------------------------------	
+	--! \file  !!FILE
+	--! \author Ngoc-Sinh Nguyen
+	--! \date  !!DATE
+	--! \brief ${1:brief}
+	--------------------------------------------------
+
+snippet cmt
+	--! ${1:brief} 
+
+snippet DoxyB
+	--! \brief ${1:brief}
+snippet DoxyD
+	--! \detail ${1:detail}

@@ -1,0 +1,21 @@
+!XTerm*background:	black
+!XTerm*foreground:	lightgray
+
+
+XTerm*foreground: #d3d3d3
+XTerm*background: black
+
+xterm*vt100.initialFont: 5
+XTerm*scrollBar:        false
+
+
+!UXTerm*background:	black
+!UXTerm*foreground:	lightgray
+UXTerm*vt100.initialFont: 5
+UXTerm*scrollBar:        false
+
+*scrollTtyOutput:  false
+*selectToClipboard: false
+
+dzen2*foreground: #FFFFFF
+dzen2*background: #1b1d1e

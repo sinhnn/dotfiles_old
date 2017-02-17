@@ -1,0 +1,8 @@
+nm-applet
+ibus-daemon
+pidgin
+thunderbird
+mate-panel
+notification-daemon
+mate-screensaver
+google-drive-ocamlfuse ${HOME}/Drive

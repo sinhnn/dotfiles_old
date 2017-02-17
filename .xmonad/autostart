@@ -1,0 +1,48 @@
+################################################################################
+# Project name   : 
+# File name      : autostart.sh
+# Created date   : Tue 01 Mar 2016 08:46:14 PM ICT
+# Author         : Ngoc-Sinh Nguyen
+# Last modified  : Tue 01 Mar 2016 09:22:56 PM ICT
+# Guide          : 
+###############################################################################
+#!/usr/bin/env bash
+
+set -u
+
+# launch DBus if needed
+if which dbus-launch >/dev/null && test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+      eval "$(dbus-launch --sh-syntax --exit-with-session)"
+fi
+
+# launch policykit (needed for NetworkManager)
+#/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1  &
+
+# launch gnome-keyring
+if which gnome-keyring-daemon >/dev/null; then
+   export $(gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)
+fi
+
+xrdb -merge ~/.Xresources &
+
+# caps becomes a control, lwin becomes lalt
+setxkbmap -option compose:menu -option ctrl:nocaps -option altwin:swap_lalt_lwin
+
+
+
+############################## APPLICATIONS ##############################
+function runApp() {
+if [[ $(pgrep $1) = ""  ]]; then
+  $* &
+fi
+}
+
+while read a
+do
+  echo $a
+  runApp $a
+  sleep 1
+done < ~/.xmonad/apps.txt
+  
+
+
