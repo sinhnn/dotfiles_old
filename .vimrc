@@ -54,8 +54,6 @@ execute pathogen#helptags()
 filetype on
 filetype plugin indent on
 
-
-
 " -------------------- Common source file setting --------------------
 "autocmd QuitPre *.{c,cpp,cxx,hpp,cc,h,v,sv,vhd,vhdl,sh,md} call UpdateDF()
 "autocmd QuitPre Makefile call UpdateDF()
@@ -77,6 +75,7 @@ highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
 match ExtraWhitespace /\s\+$/
 
+
 " -------------------- C/C++ file --------------------
 autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
@@ -84,24 +83,22 @@ autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 au FileType cpp set tags+=.tags,../.tags
 au FileType c set tags+=.tags,../.tags
-autocmd bufnewfile *.{c,cpp,cxx,hpp,cc,h,v,sv}  0r ~/.vim/header/headerC.txt
-autocmd bufnewfile README 0r ~/.vim/header/headerC.txt
+"autocmd bufnewfile *.{c,cpp,cxx,hpp,cc,h,v,sv}  0r ~/.vim/header/headerC.txt
+"autocmd bufnewfile README 0r ~/.vim/header/headerC.txt
 
 " -------------------- VHDL file --------------------
-autocmd bufnewfile *.{vhd,vhdl}  0r ~/.vim/header/headerVHDL.txt
 au FileType vhdl setlocal comments=:--
 au FileType vhdl setlocal fo+=c fo+=r fo-=o
 
 
-" -------------------- Markdown file --------------------
-autocmd bufnewfile *.{md}  0r ~/.vim/header/headerMD.txt
-" -------------------- Latex file --------------------
-autocmd bufnewfile *.{tex}  0r ~/.vim/header/headerTEX.txt
-" -------------------- make file --------------------
-autocmd bufnewfile Makefile 0r ~/.vim/header/headerMAKE.txt
-" -------------------- Shell file --------------------
-autocmd bufnewfile *.{sh} 0r ~/.vim/header/headerSH.txt
+" -------------------- Auto insert header --------------------
+function Insertheader ()
+	let sft = &filetype
+	execute '0r ' . "~/.vim/header/header." . sft
+	unlet sft
+endfunction
 
+autocmd bufnewfile * call Insertheader ()
 
 " -------------------- Doxygen --------------------
 " Update file name, date modified  function
