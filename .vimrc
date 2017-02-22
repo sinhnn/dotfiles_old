@@ -15,7 +15,7 @@ set hlsearch " Hightlight search"
 set incsearch "Search as morden browser"
 set showcmd
 set wildmenu
-set textwidth=80
+"set textwidth=80
 set cmdheight=2 "Command height window"
 set smartcase "Try smart with case when searching"
 set path=.,inc,src,../inc,../src
@@ -93,9 +93,10 @@ au FileType vhdl setlocal fo+=c fo+=r fo-=o
 
 " -------------------- Auto insert header --------------------
 function Insertheader ()
-	let sft = &filetype
-	execute '0r ' . "~/.vim/header/header." . sft
-	unlet sft
+	let sftf = $HOME . "/.vim/header/header." . &filetype
+	if filereadable( sftf )
+		execute '0r ' . sftf
+	endif
 endfunction
 
 autocmd bufnewfile * call Insertheader ()
