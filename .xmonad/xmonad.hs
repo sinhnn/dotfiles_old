@@ -1,10 +1,7 @@
-
+-- Imports
 import XMonad.Prompt
 import XMonad.Prompt.RunOrRaise (runOrRaisePrompt)
 import XMonad.Prompt.AppendFile (appendFilePrompt)
-
-
-
 import XMonad
 import System.IO
 import qualified XMonad.StackSet as W
@@ -12,9 +9,7 @@ import qualified Data.Map as M
 import System.Exit
 import XMonad.Util.Run (safeSpawn, spawnPipe)
 import Graphics.X11.ExtraTypes.XF86
-
 import XMonad.Actions.GridSelect
-
 -- HOOKS
 import XMonad.Hooks.ManageDocks
 import XMonad.ManageHook
@@ -25,7 +20,6 @@ import XMonad.Hooks.UrgencyHook
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.InsertPosition
-
 -- LAYOUTS
 import XMonad.Layout.NoBorders
 -- Layout per workspace
@@ -43,46 +37,37 @@ import Data.Ratio ((%))
 import XMonad.Layout.Reflect (reflectHoriz)
 -- Grid
 import XMonad.Layout.Grid
-
-
 -- Find nearest empty work space
 import XMonad.Actions.FindEmptyWorkspace
 
-
 ------------------------------APPS------------------------------
-pdf   = "atril"
-mail  = "thunderbird"
+pdf           = "atril"
+mail          = "thunderbird"
 compose_mail  = "thunderbird -compose"
-chat  = "pidgin"
-web   = "firefox"
-music = "rhythmbox"
-video = "vlc"
-tor   = "transmission-gtk"
-file  = "caja"
---mTerminal = "gnome-terminal"
-mTerminal = "xterm"
+chat          = "pidgin"
+web           = "firefox"
+music         = "audacious"
+video         = "vlc"
+tor           = "transmission-gtk"
+file          = "caja"
+term          = "xterm"
+dic           = "goldendict"
+screensaver   = "mate-screensaver-command --lock"
 --Note: get window information by "xprop"
-
-
-
-
--- MAIN KEY
+-- MAIN KEYs
 modMask' = mod4Mask
 altKey   = mod1Mask
 winKey   = mod4Mask
 
 
 ----STATUS BAR
--- dzen2
---myDzen = "dzen2 -x '0' -y '0' -h '18' -w '1200' -ta 'l' -fg '#FFFFFF' -bg '#1B1D1E' -fn '-*-terminus-medium-r-*-*-18-*-*-*-*-*-*-*' && conky | dzen2 -p -x '1200' -w '400' -h '18' -ta 'r' -bg '#1B1D1E' -fg '#FD971F' -y '0' -fn '-*-terminus-medium-r-*-*-18-*-*-*-*-*-*-*' && ~/.xmonad/startxmonad"
+--dzen2
 dzenLeft= "~/.xmonad/dzenLeft.sh"
 dzenRight="~/.xmonad/dzenRight.sh"
 autostart="~/.xmonad/autostart;"
 myDzen = dzenLeft ++ " | " ++ dzenRight ++ " | " ++  autostart
 --xmobar
 xmobarBar = "bash -c \"tee >(xmobar -x0) | xmobar -x1 | /home/sinhnn/.xmonad/autostart\""
-
-
 --- WORKSPACES
 workspaces'    = ["1.1:main", "1.2:main", "1.3:main", "4d:doc", "5f:web","6s:mail","7a:music","8r:win", "9g:img"]
 
@@ -90,8 +75,8 @@ workspaces'    = ["1.1:main", "1.2:main", "1.3:main", "4d:doc", "5f:web","6s:mai
 -------------------------------------------------------------------------------
 -- MAIN --
 main :: IO ()
-main = xmonad =<< statusBar myBar pp kb conf 
-  where 
+main = xmonad =<< statusBar myBar pp kb conf
+  where
     uhook    = withUrgencyHookC NoUrgencyHook urgentConfig
     --Statusbar: dzen2 or xmobar
     myBar    = myDzen -- xmobar
@@ -110,23 +95,21 @@ myConfig = defaultConfig { workspaces         = workspaces'
                          , borderWidth        = 2
                          , normalBorderColor  = colorNormalBorder
                          , focusedBorderColor = colorFocusedBorder
-                         , terminal           = mTerminal
+                         , terminal           = term
                          , keys               = keys'
                          , handleEventHook    = fullscreenEventHook
                          , layoutHook         = layoutHook'
                          , manageHook         = manageHook'
                          , startupHook        = setWMName "LG3D"
                          }
-----------------------------------------------------------------------
-------------------------------MANAGEHOOK------------------------------ 
+------------------------------MANAGEHOOK------------------------------
 manageHook' :: ManageHook
 manageHook' = insertPosition Above Newer <+> (composeAll . concat $
     [ [resource     =? r            --> doIgnore            |   r   <- myIgnores] -- ignore desktop
     , [className    =? c            --> doShift  "5f:web"   |   c   <- myWebs   ] -- move webs to main
     , [className    =? c            --> doShift  "6s:mail"  |   c   <- myMail   ] -- move webs to main
-    , [resource    =? c            --> doShift  "6s:mail"  |   c   <- myMail   ] -- move webs to main
+    , [resource     =? c            --> doShift  "6s:mail"  |   c   <- myMail   ] -- move webs to main
     , [className    =? c            --> doShift  "6s:mail"  |   c   <- myChat   ] -- move webs to main
-    --, [className    =? c            --> doShift   "4d:doc"  |   c   <- myDoc    ] -- move chat to doc
     , [className    =? c            --> doShift  "7a:music" |   c   <- myMusic  ] -- move music to music
     , [className    =? c            --> doShift  "9g:img"   |   c   <- myTor    ] -- move img to div
     , [className    =? c            --> doShift  "9g:img"   |   c   <- myGimp   ] -- move img to div
@@ -134,15 +117,15 @@ manageHook' = insertPosition Above Newer <+> (composeAll . concat $
     , [className    =? c            --> doCenterFloat       |   c   <- myFloats ] -- float my floats
     , [name         =? n            --> doCenterFloat       |   n   <- myNames  ] -- float my names
     , [isFullscreen                 --> myDoFullFloat                           ]
-    ]) 
+    ])
     where
         role          = stringProperty "WM_WINDOW_ROLE"
         name          = stringProperty "WM_NAME"
         -- classnames
-        myFloats      = ["Smplayer","MPlayer","VirtualBox","Xmessage","XFontSel","Downloads","Nm-connection-editor","Write", "Msgcompose", "Zenity", "Yad"]
+        myFloats      = ["MPlayer","VirtualBox","Xmessage","Nm-connection-editor","Write", "Msgcompose", "Zenity", "Yad"]
         myWebs        = ["Firefox","Google-chrome","Chromium", "Chromium-browser"]
         myMovie       = ["Boxee","Trine"]
-        myMusic       = ["Rhythmbox","Spotify","Audacious", "vlc"]
+        myMusic       = ["Rhythmbox","Spotify","Audacious", "Vlc"]
         myChat        = ["Buddy List", "Psi", "Psi+", "chat", "psi", "Skype", "Pidgin"]
         myGimp        = ["Gimp", "Dia"]
         myDev         = ["gnome-terminal"]
@@ -180,17 +163,14 @@ mxmobarPP = xmobarPP{ ppCurrent        = xmobarColor "#ebac54" "#1b1d1e"
 		     , ppSep             = xmobarColor "#429942" "" " | "
 		     , ppWsSep           = " "
 		    }
-
-
 ------------------------------LAYOUT------------------------------
 
-layoutHook'  =  onWorkspace "9g:img" gimpLayout $ 
+layoutHook'  =  onWorkspace "9g:img" gimpLayout $
 		onWorkspace "6s:mail" chatLayout $
                 customLayout
 
-
-customLayout = avoidStruts $ full ||| sTile ||| sMtile  --Mirror tiled  -- ||| simpleFloat 
-chatLayout = avoidStruts $ full ||| sTile ||| imLayout 
+customLayout = avoidStruts $ full ||| sTile ||| sMtile  --Mirror tiled  -- ||| simpleFloat
+chatLayout = avoidStruts $ full ||| sTile ||| imLayout
 gimpLayout   =  avoidStruts  gimpL ||| imLayout ||| diaL ||| full ||| sTile
 
 -- Typical layout
@@ -207,11 +187,8 @@ diaL   = renamed [Replace "Dia" ] $ withIM(0.15) (Role "toolbox_window") $
                reflectHoriz $
                withIM(0.2) (Role "layer_window") Full
 
-
-
-
-imLayout = renamed [Replace "IM" ] $ reflectHoriz $ withIM ratio pidginRoster  
-	    $ withIM skypeRatio skypeRoster Grid 
+imLayout = renamed [Replace "IM" ] $ reflectHoriz $ withIM ratio pidginRoster
+	    $ withIM skypeRatio skypeRoster Grid
   where
     ratio = (1/5)
     skypeRatio = (1/5)
@@ -230,13 +207,11 @@ colorBlue           = "#66D9EF"
 colorYellow         = "#E6DB74"
 colorWhite          = "#CCCCC6"
 colorRed            = "#FF0000"
- 
 colorNormalBorder   = colorDarkGray
 colorFocusedBorder  = colorRed
 barFont  = "terminus"
 barXFont = "inconsolata:size     = 12"
 xftFont  = "xft: inconsolata-14"
-
 
 ------------------------------PROMPT CONFIG------------------------------
 mXPConfig :: XPConfig
@@ -261,62 +236,54 @@ myGSConfig = defaultGSConfig { gs_cellwidth = 160 }
 ------------------------------URGEN-----------------------------
 urgentConfig = UrgencyConfig { suppressWhen = Focused, remindWhen = Dont }
 
-
-
 ------------------------------KEYS------------------------------
-
 toggleStrutsKey :: XConfig Layout -> (KeyMask, KeySym)
 toggleStrutsKey XConfig {XMonad.modMask = winKey} = (winKey, xK_b)
-
 keys' :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 keys' conf@(XConfig {XMonad.modMask = winKey}) = M.fromList $
-    -- Launching and killing programs
-    --[ ((controlMask .|. altKey,        xK_t), safeSpawn (XMonad.terminal conf) []) 
-    [ ((altKey,                        xK_Return), safeSpawn (XMonad.terminal conf) []) 
-    , ((altKey,                        xK_r     ), runOrRaisePrompt largeXPConfig) 
+    -- winKey is used for display, altKey is used for application
+    [
+    -------------------- Application Keys --------------------
+    -- Launching application
+    ((altKey,                          xK_Return), safeSpawn (XMonad.terminal conf) [])
+    , ((altKey,                        xK_r     ), runOrRaisePrompt largeXPConfig)
     , ((altKey,                        xK_s     ), safeSpawn mail[])
     , ((altKey .|. shiftMask,          xK_s     ), spawn compose_mail)
-    , ((altKey,                        xK_g     ), safeSpawn "steam" [])
     , ((altKey,                        xK_f     ), safeSpawn web [])
     , ((altKey,                        xK_c     ), safeSpawn chat [])
     , ((altKey,                        xK_t     ), safeSpawn tor [])
     , ((altKey,                        xK_d     ), safeSpawn pdf [])
     , ((altKey,                        xK_h     ), safeSpawn file [])
-    , ((altKey,                        xK_q     ), safeSpawn "goldendict" [])
-    , ((controlMask,                   xK_Right ), safeSpawn "" [])
+    , ((altKey,                        xK_g     ), safeSpawn dic [])
+    , ((altKey,                        xK_a     ), safeSpawn music [])
     , ((winKey,                        xK_F5    ), spawn "xset dpms force off")
-    , ((winKey     .|. shiftMask,      xK_c     ), kill)
-    , ((controlMask .|. altKey,        xK_l     ), spawn "xscreensaver-command -lock")
+    , ((controlMask .|. altKey,        xK_l     ), safeSpawn screensaver [])
     , ((controlMask .|. altKey,        xK_Delete), spawn "systemctl poweroff")
-
-		-- Audacious keys
-    , ((altKey,                         xK_a     ), safeSpawn music [])
-    --, ((controlMask .|. shiftMask,     xK_Right ), spawn "audacious -f")
-    --, ((controlMask .|. shiftMask,     xK_Left  ), spawn "audacious -r")
-    --, ((controlMask .|. shiftMask,     xK_a     ), spawn "audacious -t")
-    , ((altKey,                        xK_v     ), safeSpawn "vlc" [])
+    -- Killing application
+    , ((winKey     .|. shiftMask,      xK_c     ), kill)
+    -- Audio Keys with audacious
+    , ((0, xF86XK_AudioNext                     ), safeSpawn music ["--fwd"])
+    , ((0, xF86XK_AudioPrev                     ), safeSpawn music ["--rew"])
+    , ((0, xF86XK_AudioPlay                     ), safeSpawn music ["--play-pause"])
+    -- Volume keys
+    , ((controlMask,                   xK_Right ), safeSpawn "amixer" ["-c", "0", "set", "Master", "1dB+"])
+    , ((controlMask,                   xK_Left  ), safeSpawn "amixer" ["-c", "0", "set", "Master", "1dB-"])
+    , ((0, xF86XK_AudioRaiseVolume              ), safeSpawn "amixer" ["-q", "set", "Master", "2%+"])
+    , ((0, xF86XK_AudioLowerVolume              ), safeSpawn "amixer" ["-q", "set", "Master", "2%-"])
+    , ((0, xF86XK_AudioMute                     ), safeSpawn "amixer" ["-q", "set", "Master", "toggle"])
+    -- Brightness & Display keys
+    , ((0, xF86XK_MonBrightnessUp               ), safeSpawn "xbacklight" ["-inc", "40"])
+    , ((0, xF86XK_MonBrightnessDown             ), safeSpawn "xbacklight" ["-dec", "10"])
     , ((winKey,                        xK_F4    ), spawn "/home/sinhnn/.xmonad/toggleVGA1.sh" )
-
---{ --Extra keybinding
-    , ((controlMask,               xK_Right    ), safeSpawn "amixer" ["-c", "0", "set", "Master", "1dB+"])
-    , ((controlMask,               xK_Left     ), safeSpawn "amixer" ["-c", "0", "set", "Master", "1dB-"])
-
-
-
-    , ((0, xF86XK_MonBrightnessUp       ), safeSpawn "xbacklight" ["-inc", "40"])
-    , ((0, xF86XK_MonBrightnessDown     ), safeSpawn "xbacklight" ["-dec", "10"])
     --, ((0, xF86XK_Display               ), safeSpawn "xrandr --output LVDS1 --off" [])
-    , ((0, xF86XK_AudioRaiseVolume      ), safeSpawn "amixer" ["-q", "set", "Master", "2%+"])
-    , ((0, xF86XK_AudioLowerVolume      ), safeSpawn "amixer" ["-q", "set", "Master", "2%-"])
-    , ((0, xF86XK_AudioMute             ), safeSpawn "amixer" ["-q", "set", "Master", "toggle"])
---}
-    -- grid
+
+    --------------------- Xmonad layout and display control ------------------
+    -- Grid
     , ((winKey,               xK_Tab   ), goToSelected myGSConfig)
     -- layouts
     , ((winKey,               xK_space ), sendMessage NextLayout)
     , ((winKey,               xK_b     ), sendMessage ToggleStruts)
     , ((winKey .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
-
     -- floating layer stuff
     , ((winKey,               xK_t     ), withFocused $ windows . W.sink)
     -- refresh
@@ -327,31 +294,24 @@ keys' conf@(XConfig {XMonad.modMask = winKey}) = M.fromList $
     , ((winKey,               xK_j     ), windows W.focusDown)
     , ((winKey,               xK_k     ), windows W.focusUp)
     , ((winKey,               xK_m     ), windows W.focusMaster)
-
     -- swapping
     , ((winKey .|. shiftMask, xK_Return), windows W.swapMaster)
     , ((winKey .|. shiftMask, xK_j     ), windows W.swapDown  )
     , ((winKey .|. shiftMask, xK_k     ), windows W.swapUp    )
-
     -- increase or decrease number of windows in the master area
     , ((winKey              , xK_comma ), sendMessage (IncMasterN 1))
     , ((winKey              , xK_period), sendMessage (IncMasterN (-1)))
-
     -- resizing
-    , ((winKey,               xK_h  ), sendMessage Shrink)
-    , ((winKey,               xK_l  ), sendMessage Expand)
-    --, ((winKey,               xK_Down   ), sendMessage MirrorShrink)
-    --, ((winKey,               xK_Up     ), sendMessage MirrorExpand)
-
-    , ((winKey,               xK_y  ), viewEmptyWorkspace)
-
+    , ((winKey,               xK_h     ), sendMessage Shrink)
+    , ((winKey,               xK_l     ), sendMessage Expand)
+    , ((winKey,               xK_y     ), viewEmptyWorkspace)
     -- quit, or restart
     , ((winKey .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
     , ((winKey              , xK_q     ), spawn "killall xmenud ; killall conky; killall dzen2; xmonad --recompile; xmonad --restart")
     ]
     ++
-    -- mod-[1..6] %! Switch to workspace N
-    -- mod-shift-[1..6] %! Move client to workspace N
+    -- mod-[1..9] %! Switch to workspace N
+    -- mod-shift-[1..9] %! Move client to workspace N
     [((m .|. winKey, k), windows $ f i)
         | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
