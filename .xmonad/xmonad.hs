@@ -52,13 +52,12 @@ tor           = "transmission-gtk"
 file          = "caja"
 term          = "xterm"
 dic           = "goldendict"
-screensaver   = "mate-screensaver-command --lock"
+screensaver   = "mate-screensaver-command"
 --Note: get window information by "xprop"
 -- MAIN KEYs
 modMask' = mod4Mask
 altKey   = mod1Mask
 winKey   = mod4Mask
-
 
 ----STATUS BAR
 --dzen2
@@ -67,7 +66,7 @@ dzenRight="~/.xmonad/dzenRight.sh"
 autostart="~/.xmonad/autostart;"
 myDzen = dzenLeft ++ " | " ++ dzenRight ++ " | " ++  autostart
 --xmobar
-xmobarBar = "bash -c \"tee >(xmobar -x0) | xmobar -x1 | /home/sinhnn/.xmonad/autostart\""
+xmobarBar = "bash -c \"tee >(xmobar -x0) | xmobar -x1 | ~/.xmonad/autostart\""
 --- WORKSPACES
 workspaces'    = ["1.1:main", "1.2:main", "1.3:main", "4d:doc", "5f:web","6s:mail","7a:music","8r:win", "9g:img"]
 
@@ -146,27 +145,27 @@ myDoFullFloat = doF W.focusDown <+> doFullFloat
 ------------------------------STATUS BAR CONFIG------------------------------
 mdzenPP = dzenPP  { ppCurrent           = dzenColor "#ebac54" "#1b1d1e"
                      , ppHidden          = dzenColor "white" "#1b1d1e"
-		     , ppHiddenNoWindows = dzenColor "#7b7b7b" "#1b1d1e"
-		     , ppUrgent          = dzenColor "black" "red" .pad
-		     , ppLayout          = dzenColor "#ebac54" "#1b1d1e"
-		     , ppTitle           = dzenColor "#c9a34e" "" . shorten 80
-		     , ppSep             = dzenColor "#429942" "" " | "
-		     , ppWsSep           = " "
-		    }
+                     , ppHiddenNoWindows = dzenColor "#7b7b7b" "#1b1d1e"
+                     , ppUrgent          = dzenColor "black" "red" .pad
+                     , ppLayout          = dzenColor "#ebac54" "#1b1d1e"
+                     , ppTitle           = dzenColor "#c9a34e" "" . shorten 80
+                     , ppSep             = dzenColor "#429942" "" " | "
+                     , ppWsSep           = " "
+                    }
 
 mxmobarPP = xmobarPP{ ppCurrent        = xmobarColor "#ebac54" "#1b1d1e"
                      , ppHidden          = xmobarColor "white" "#1b1d1e"
-		     , ppHiddenNoWindows = xmobarColor "#7b7b7b" "#1b1d1e"
-		     , ppUrgent          = xmobarColor "black" "red" .pad
-		     , ppLayout          = xmobarColor "#ebac54" "#1b1d1e"
-		     , ppTitle           = xmobarColor "#c9a34e" "" . shorten 80
-		     , ppSep             = xmobarColor "#429942" "" " | "
-		     , ppWsSep           = " "
-		    }
+                     , ppHiddenNoWindows = xmobarColor "#7b7b7b" "#1b1d1e"
+                     , ppUrgent          = xmobarColor "black" "red" .pad
+                     , ppLayout          = xmobarColor "#ebac54" "#1b1d1e"
+                     , ppTitle           = xmobarColor "#c9a34e" "" . shorten 80
+                     , ppSep             = xmobarColor "#429942" "" " | "
+                     , ppWsSep           = " "
+                    }
 ------------------------------LAYOUT------------------------------
 
 layoutHook'  =  onWorkspace "9g:img" gimpLayout $
-		onWorkspace "6s:mail" chatLayout $
+                onWorkspace "6s:mail" chatLayout $
                 customLayout
 
 customLayout = avoidStruts $ full ||| sTile ||| sMtile  --Mirror tiled  -- ||| simpleFloat
@@ -188,7 +187,7 @@ diaL   = renamed [Replace "Dia" ] $ withIM(0.15) (Role "toolbox_window") $
                withIM(0.2) (Role "layer_window") Full
 
 imLayout = renamed [Replace "IM" ] $ reflectHoriz $ withIM ratio pidginRoster
-	    $ withIM skypeRatio skypeRoster Grid
+            $ withIM skypeRatio skypeRoster Grid
   where
     ratio = (1/5)
     skypeRatio = (1/5)
@@ -257,7 +256,7 @@ keys' conf@(XConfig {XMonad.modMask = winKey}) = M.fromList $
     , ((altKey,                        xK_g     ), safeSpawn dic [])
     , ((altKey,                        xK_a     ), safeSpawn music [])
     , ((winKey,                        xK_F5    ), spawn "xset dpms force off")
-    , ((controlMask .|. altKey,        xK_l     ), safeSpawn screensaver [])
+    , ((controlMask .|. altKey,        xK_l     ), safeSpawn screensaver ["--lock"])
     , ((controlMask .|. altKey,        xK_Delete), spawn "systemctl poweroff")
     -- Killing application
     , ((winKey     .|. shiftMask,      xK_c     ), kill)
