@@ -32,14 +32,15 @@ function gen_m3u() {
 	grep -o "href.*download.html\" title" *.html > playlist.txt
 	rm -f *.html
 	# GET link from html
-	echo -e "#EXTM3U \n" > ${outfile}
+	rm ${outfile}
+	touch ${outfile}
 	while read l
 	do
 		mp3_link=$(get_link ${l})
 		echo ${mp3_link}
 		tmp=$(wget -q ${mp3_link} &&  grep -o "href=.*data.*.mp3" *.html | tail -n 1)
 		mp3_link=$(get_link "${tmp}")
-		echo "EXTINF" >> ${outfile}
+		#echo "EXTINF" >> ${outfile}
 		echo "${mp3_link}" >> ${outfile}
 		rm -f *.html
 	done < playlist.txt
