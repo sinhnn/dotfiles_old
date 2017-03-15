@@ -7,24 +7,6 @@
 # Guide          : Play and download musics from chiasenhac.vn to ${HOME}/Musics/csn
 ###############################################################################
 #!/bin/bash
-
-function download_media() {
-	#function_body
-	grep "chiasenhac" "$@" > $@.txt
-	wget -nc -P ${MUSIC_DIR}/ -i $@.txt
-	rm -f $@.txt
-}
-
-function play_download_media(){
-	#kodi-send --action="PlayMedia(${abs})"
-	mplayer -playlist "$@" &
-	download_media "$@"
-}
-
-function get_link() {
-	echo $(echo "$@" | sed -n 's/.*href="\([^"]*\).*/\1/p')
-}
-
 function usage () {
         echo "Usage :  $0 [options] [--]
 	Options:
@@ -34,6 +16,12 @@ function usage () {
 	-dl|--download-only	download only"
 }
 
+# Get http link
+function get_link() {
+	echo $(echo "$@" | sed -n 's/.*href="\([^"]*\).*/\1/p')
+}
+
+# Gen m3u playlist from link
 function gen_m3u() {
 	playlist_link="$1"
 	outfile="$2"
@@ -57,11 +45,45 @@ function gen_m3u() {
 	done < playlist.txt
 	rm -f playlist.txt
 }
+# Local playlist
+function csn_m3u_to_local_m3u() {
+	if="$1"
+	of="$2"
+	dir=$(dirname "$if")
+	sed -e 's~http.*/~'${dir}'/~g' "$if" > "$of"
+	sed -i -e 's/%20/ /g' "$of"
+}
+# Remove file not exist in playlist.m3u
+function rm_non_exist_in_local_mp3() {
+	dir=$(dirname $@)
+	ls ${dir}/*.mp3 | sort > file_in_dir.txt
+	sed '/EXT/d' $@ > tmp.txt
+	sed -i '/^\s*$/d' tmp.txt
+	sort tmp.txt > file_in_list.txt
+	diff -c file_in_dir.txt file_in_list.txt > patch
+	grep "^- " patch | sed 's/^- //g'> rm.txt
+	[[ -s rm.txt ]] && { cat rm.txt | xargs -d '\n'  rm ;}
+	rm -f file_in_dir.txt file_in_list.txt patch tmp.txt rm.txt
+}
+
+#Download only
+function download_media() {
+	#function_body
+	grep "chiasenhac" "$@" > $@.txt
+	wget -nc -P ${MUSIC_DIR}/ -i $@.txt
+	rm -f $@.txt
+}
+# Download and play by mplayer
+function play_download_media(){
+	#kodi-send --action="PlayMedia(${abs})"
+	mplayer -playlist "$@" &
+	download_media "$@"
+}
+
 
 MUSIC_DIR="${HOME}/Musics/csn/us/"
 LINK="http://chiasenhac.vn/mp3/us-uk/"
 DOWNLOAD_ONLY=false
-
 while true; do
 	case "$1" in
 		-h|--help ) usage; exit 1;;
@@ -73,17 +95,9 @@ while true; do
 		* ) break ;;
 	esac
 done
-#if [[ "$1" = "vn" ]]
-#then
-#	link="http://chiasenhac.vn/mp3/vietnam/"
-#	MUSIC_DIR=${HOME}/Musics/csn/vn/
-#
-#else
-#	link="http://chiasenhac.vn/mp3/us-uk/"
-#	MUSIC_DIR=${HOME}/Musics/csn/us/
-#fi
 mkdir -p ${MUSIC_DIR}
 PLAYLIST=${MUSIC_DIR}/csn.m3u
+LOCAL_PLAYLIST=${MUSIC_DIR}/playlist.m3u
 
 
 # GET html data
@@ -93,3 +107,5 @@ if [[ "${DOWNLOAD_ONLY}" = "true" ]]; then
 else
 	play_download_media ${PLAYLIST}
 fi
+csn_m3u_to_local_m3u ${PLAYLIST} ${LOCAL_PLAYLIST}
+rm_non_exist_in_local_mp3 "${LOCAL_PLAYLIST}"
