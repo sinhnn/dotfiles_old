@@ -1,0 +1,53 @@
+################################################################################
+# Project name   :
+# File name      : !!FILE
+# Created date   : !!DATE
+# Author         : Ngoc-Sinh Nguyen
+# Last modified  : !!DATE
+# Guide          :
+###############################################################################
+
+#!/bin/bash
+
+command -v yad > /dev/null 2>&1 || {zenity -error --text "Please install yad"}
+command -v lp > /dev/null 2>&1 || {zenity -error --text "Please install scanimage"}
+
+opts=$(yad --width=400 --title="" --text="Please enter your details:" \
+	--form --date-format="%-d %B %Y" --item-separator="," \
+	--field="Side":CB \
+	--field="Orientation":CB \
+	'two-sided-long-edge,one-sided,two-sided-short-edge' \
+	'portrait,landscape'  \
+)
+[ $? -ne 0 ] && exit 1
+side$(echo "$opts" | cut -d "|" -f1)
+orient=$(echo "$opts" | cut -d "|" -f2)
+#side="${opts%%|*}"
+#opts=${opts:${#side} + 1}
+#orient="${opts%%|*}"
+#opts=${opts:${#orient} + 1}
+
+if [[ ${orient} = "portrait" ]]; then
+	orient=""
+else
+	orient="-o landscape"
+
+fi
+
+
+
+for arg
+do
+    # input/output
+    input=$(readlink -f "$arg")
+    #input_filename=$(basename -- "$input")
+
+    type=${input##*.}
+
+    case $type in
+        "pdf" | "PDF" | "jpg" | "JPG" | "png" | "PNG" | "JPEG" | "jpeg")
+             lp -o sides="${side}" -o fit-to-page  ${orient} -- "$input" ;;
+        *)
+	    zenity --error --text="This file $type is not supported ";;
+    esac
+done

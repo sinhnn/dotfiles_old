@@ -1,0 +1,48 @@
+################################################################################
+# Project name   :
+# File name      : Merge into PDF
+# Created date   : Wed 02 Nov 2016 12:48:36 PM ICT
+# Author         : Ngoc-Sinh Nguyen
+# Last modified  : Wed 02 Nov 2016 12:48:36 PM ICT
+# Guide          :
+###############################################################################
+#!/bin/bash
+command -v yad 2>&1 || { zenity --error --text="Please install yad"; exit 1; }
+command -v pdftk 2>&1 || { zenity --error --text="Please install pdftk"; exit 1; }
+
+opts=$(yad --width=400 --title="" --text="Please enter your details:"\
+	--form --date-format="$-d %B %Y" --item-separator=","\
+	--field="prefix"\
+	--field="Range"\
+	"Default"\
+	"-"\
+)
+
+
+echo ${opts}
+prefix="${opts%%|*}"
+opts=${opts:${#prefix} + 1}
+range="${opts%%|*}"
+opts=${opts:${#range} + 1}
+
+prefix_of=""
+for args
+do
+	if [[ "${prefix}" = "Default" ]]; then
+		prefix_of="${args%.*}"
+	else
+		prefix_of="${prefix}"
+	fi
+	f=$(readlink -f -- "$args")
+	if [[ "$(basename ${args##*.})" != "pdf" ]]
+	then
+		~/.config/caja/scripts/pdf/topdf "$f"
+		f="${prefix_of}.pdf"
+	fi
+	if [[ "${range}" = "-" ]]
+	then
+		pdftk "${f}" burst output "${PWD}/${prefix_of}"_%03d.pdf
+	else
+		pdftk "${f}" cat "${range}" output "${PWD}/${prefix_of}"_${range}.pdf
+	fi
+done

@@ -1,0 +1,88 @@
+################################################################################
+# Project name   :
+# File name      : embedded_font_epub.sh
+# Created date   : Wed 16 Nov 2016 07:58:52 AM ICT
+# Author         : Ngoc-Sinh Nguyen
+# Last modified  : Wed 16 Nov 2016 01:40:59 PM ICT
+# Guide          :
+###############################################################################
+#!/bin/bash
+command -v ebook-convert > /dev/null 2>&1 || {zenity -error --text="Please install ebook-convert"}
+function embed_font() {
+	if="$1" #infile
+	font="$2"
+	#ext="${if##*.}" # extension
+	bif="${if%.*}" # base name without extenstion
+	odir="$3"  #output dir
+	of="${odir}/${bif}_vn.epub"
+	# Remove embedded font
+	#ebook-meta "${if}" --get-cover="${bif}.jpg" # get the cover
+	#ebook-convert "${if}" "${bif}.txt" # To txt to remove embeded
+	# Convert and embedded font
+	ebook-convert "${if}" "${of}" \
+		--embed-font-family "${font}" \
+	        --margin-left 18 \
+	        --margin-right 18 \
+	        --margin-top 18 \
+	        --margin-bottom 0 \
+		--minimum-line-height 140
+	#ebook-meta "${of}" --cover="${bif}.jpg"
+	#rm -f "${bif}.txt"
+	#rm -f "${bif}.jpg"
+	notify-send "Embedded font: ${if} to ${of} "
+}
+
+
+function get_gui_opts() {
+	#function_body
+	if [[ $(mount | grep READER | awk '{print $3}') ]]; then
+		opts=$(yad --width=600 --height=200 \
+			--title="Embeded vietnamese font by Calibre" \
+			--text="Select a font and output destination" --form \
+			--date-format="%-d %B %Y" --item-separator=","  \
+			--field="Choose a font":CB --field="Sony eReader":CB \
+			--field="Choose output destination":CB \
+			"Carlito,Roboto,Calibri,Helvetica Neue,Helvetica World,Palatino,Gentium Book Basic"  \
+			"True,False" \
+			"False, True")
+
+
+	else
+		opts=$(yad --width=600 --height=200 \
+			--title="Embeded vietnamese font by Calibre" \
+			--text="Select a font and output destination" --form \
+			--date-format="%-d %B %Y" --item-separator=","  \
+			--field="Choose a font":CB --field="Sony eReader":RO \
+			--field="Choose output destination":CB \
+			"Carlito,Roboto,Calibri,Helvetica Neue,Helvetica World,Palatino,Gentium Book Basic"  \
+			"False" \
+			"False, True")
+
+
+	fi
+	[[ $? != 0 ]] && exit 1
+	echo "${opts}"
+}
+
+#-------------------- Main --------------------
+opts=$(get_gui_opts)
+[[ $? != 0 ]] && exit 1
+
+mFont=$(echo ${opts} | cut -d "|" -f1)
+echo "mFont $mFont"
+mSony=$(echo ${opts} | cut -d "|" -f2)
+mDest=$(echo ${opts} | cut -d "|" -f3)
+output_dir="./"
+
+if [[ "${mDest}" = "True" ]]; then
+	output_dir=$(zenity --file-selection --directory || exit 1)
+elif [[ "${mSony}" = "True" ]]; then
+	output_dir=$(mount | grep READER | awk '{print $3}')
+	output_dir="${output_dir}/Sony_Reader/media/books"
+fi
+
+
+for args
+do
+	embed_font  "${args}" "${mFont}" "${output_dir}"
+done
