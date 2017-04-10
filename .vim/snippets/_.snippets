@@ -278,50 +278,5 @@ snippet AGPL
 	You should have received a copy of the GNU Affero General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-snippet WEEK
-	----------------------------------------	
-	Week `system('grep -r "^Week [0-9].*" ' . expand('%:t') . '| head --lines=1 | cut -b 6') + 1` (`system('date --date "last Mon" +%Y/%m/%d')` - `system('date --date "Sun" +%Y/%m/%d')`) 
-	Current status:
-	   - ${1:status}
-	Technical memo:
-	   - ${2:Tech}
-	Problems and Future works:
-	   - ${3:Pro}
-	References:
-	   - ${4:Pro}
-
-snippet REP
-	--------------------------------------------------------------------------------
-	GENERAL INFORMATION
-	Name: Nguyen Ngoc Sinh
-	Email: sinhnn.92@gmail.com or sinhnn_55@vnu.edu.vn
-	Mobile:	xxxxxxxxxxx
-	Created date: `strftime("%Y/%m/%d")`
-
-
-	Research title:
-	  ${1:title}
-
-	Research descriptions:
-	Context:
-	  - ${2:context}
-	Objecttive:
-	  - ${3:objective}
-	Motivation:
-	  - ${4:motivation}
-	Obtained results:
-	  - ${5:results}
-	References:
-	  - ${6:ref}
-	--------------------------------------------------------------------------------
-			     WEEKLY PROGRESS REPORT
-	    
-
-snippet meetM
-	\section*{Thành Phần Tham Dự}
-
-snippet anno
-	\annotationDefinition{${1:def}}
-	\annotationName{${2:name}}
-	\annotationDescription{${3:des}}
-
+snippet incf includefile
+	`system("~/.vim/snippets/includefile.sh " . expand("%"))`

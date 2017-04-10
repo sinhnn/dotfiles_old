@@ -1,5 +1,4 @@
 #!/bin/bash
-
 VIM_DRI=$(shell readlink -f .)
 all:
 	mkdir -p ~/.vim/
@@ -19,8 +18,8 @@ all:
 	git clone https://github.com/MarcWeber/vim-addon-mw-utils.git; \
 	git clone https://github.com/garbas/vim-snipmate.git; \
 	git clone https://github.com/honza/vim-snippets.git; \
-	git clone https://github.com/vim-syntastic/syntastic.git; \
 	git clone https://github.com/vim-scripts/taglist.vim.git; \
-	git clone https://github.com/vim-airline/vim-airline.git
+	git clone https://github.com/vim-airline/vim-airline.git;
+	#git clone https://github.com/vim-syntastic/syntastic.git; \
 
 
