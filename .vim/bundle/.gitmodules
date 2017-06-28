@@ -1,0 +1,60 @@
+[submodule "delimitMate"]
+	path = delimitMate
+	url = https://github.com/Raimondi/delimitMate.git
+[submodule "systemverilog.vim"]
+	path = systemverilog.vim
+	url = https://github.com/nachumk/systemverilog.vim
+[submodule "syntastic"]
+	path = syntastic
+	url = https://github.com/vim-syntastic/syntastic
+[submodule "vim-surround"]
+	path = vim-surround
+	url = https://github.com/tpope/vim-surround.git
+[submodule "nerdtree"]
+	path = nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule "tabular"]
+	path = tabular
+	url = https://github.com/godlygeek/tabular.git
+[submodule "tlib_vim"]
+	path = tlib_vim
+	url = https://github.com/tomtom/tlib_vim.git
+[submodule "vim-addon-mw-utils"]
+	path = vim-addon-mw-utils
+	url = https://github.com/MarcWeber/vim-addon-mw-utils.git
+[submodule "vim-snipmate"]
+	path = vim-snipmate
+	url = https://github.com/garbas/vim-snipmate
+[submodule "vim-snippets"]
+	path = vim-snippets
+	url = https://github.com/honza/vim-snippets
+[submodule "taglist.vim"]
+	path = taglist.vim
+	url = https://github.com/vim-scripts/taglist.vim.git
+[submodule "vim-airline"]
+	path = vim-airline
+	url = https://github.com/vim-airline/vim-airline.git
+[submodule "Conque-GDB"]
+	path = Conque-GDB
+	url = https://github.com/vim-scripts/Conque-GDB
+[submodule "DoxygenToolkit.vim"]
+	path = DoxygenToolkit.vim
+	url = https://github.com/vim-scripts/DoxygenToolkit.vim
+[submodule "vim-gitgutter"]
+	path = vim-gitgutter
+	url = https://github.com/airblade/vim-gitgutter
+[submodule "vim-clang-format"]
+	path = vim-clang-format
+	url = https://github.com/rhysd/vim-clang-format
+[submodule "ultisnips"]
+	path = ultisnips
+	url = https://github.com/SirVer/ultisnips
+[submodule "supertab"]
+	path = supertab
+	url = https://github.com/ervandew/supertab
+[submodule "matchit"]
+	path = matchit
+	url = https://github.com/tmhedberg/matchit
+[submodule "tagbar"]
+	path = tagbar
+	url = https://github.com/majutsushi/tagbar
