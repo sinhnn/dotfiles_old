@@ -97,7 +97,6 @@ function! VHDL()
 			setlocal makeprg=vcom\ %\ $*
 		endif
 	endif
-	execute '!ctags ' . ''
 endfunction
 au FileType {vhdl,verliog,systemverilog} call VHDL()
 " TEX
@@ -177,6 +176,7 @@ function BeforePublic()
 	match ExtraWhitespace /\s\+$\|^\t\+\|!!FILE\|!!DATE\|\* Desc\s*:$/
 	autocmd BufWinLeave * call clearmatches()
 endfunction
+command BeforePublic call BeforePublic()
 " Uncheck style
 function UnCheckStyle()
 	set cc=
@@ -186,6 +186,24 @@ command CheckStyle call CheckStyle()
 command UnCheckStyle call UnCheckStyle()
 au FileType {cpp,c,make,sh,vhdl,verilog,systemverilog,tex} call CheckStyle ()
 " -----------------------------------------------------------------------
+function! FillLine( str )
+    " set tw to the desired total length
+    let tw = &textwidth
+    if tw==0 | let tw = 80 | endif
+    " strip trailing spaces first
+    .s/[[:space:]]*$//
+    " calculate total number of 'str's to insert
+    let reps = (tw - col("$")) / len(a:str)
+    " insert them, if there's room, removing trailing spaces (though forcing
+    " there to be one)
+    if reps > 0
+        .s/$/\=(' '.repeat(a:str, reps))/
+    endif
+	"Return nothing for snippets
+	return "" 
+endfunction
+command! -nargs=1 FillLine call FillLine(<f-args>)
+
 
 " Quit Buffer when quit file
 au BufEnter * call MyLastWindow()
