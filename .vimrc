@@ -133,14 +133,14 @@ function Insertheader ()
 	if filereadable( sftf )
 		execute '0r ' . sftf
 		g/StartHere/s/StartHere//g
-		startinsert
+		"startinsert
 	else
 		" If only extension exist.
 		let sftf = $HOME . "/.vim/header/_." . &filetype
 		if filereadable( sftf )
 			execute '0r ' . sftf
 			$
-			startinsert
+			"startinsert
 		endif
 	endif
 endfunction
@@ -191,16 +191,13 @@ function! FillLine( str )
     let tw = &textwidth
     if tw==0 | let tw = 80 | endif
     " strip trailing spaces first
-    .s/[[:space:]]*$//
     " calculate total number of 'str's to insert
-    let reps = (tw - col("$")) / len(a:str)
-    " insert them, if there's room, removing trailing spaces (though forcing
-    " there to be one)
+	let ccl=strlen(getline('.'))
+    let reps = (tw - ccl - 1) / len(a:str)
     if reps > 0
         .s/$/\=(' '.repeat(a:str, reps))/
     endif
-	"Return nothing for snippets
-	return "" 
+	return ""
 endfunction
 command! -nargs=1 FillLine call FillLine(<f-args>)
 
