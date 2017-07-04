@@ -69,34 +69,34 @@ filetype plugin indent on
 " -------------------- Make, Error format setup -------------------------------
 " CPP
 function! CCPP()
-	"autocmd BufWritePre,BufRead *.{cpp,c} :silent !${HOME}/.vim/gentags.sh %&
-	if !filereadable("Makefile")
-		if (&ft=='c')
-			setlocal makeprg=gcc\ \-c\ -o\ %.o\ %\ $*
-		elseif (&ft=='cpp')
-			setlocal makeprg=g++\ -c\ -o\ %.o\ %\ $*
-		endif
-	endif
+    "autocmd BufWritePre,BufRead *.{cpp,c} :silent !${HOME}/.vim/gentags.sh %&
+    if !filereadable("Makefile")
+        if (&ft=='c')
+            setlocal makeprg=gcc\ \-c\ -o\ %.o\ %\ $*
+        elseif (&ft=='cpp')
+            setlocal makeprg=g++\ -c\ -o\ %.o\ %\ $*
+        endif
+    endif
 endfunction
 au FileType {cpp,c} call CCPP()
 " VHDL
 function! VHDL()
-	setlocal comments=:--
-	setlocal errorformat=\*\*\ %trror:\ %f(%l):\ %m
-	setlocal errorformat+=\*\*\ %tarning:\ %f(%l):\ %m
-	let g:tlist_vhdl_settings='vhdl;d:package declarations;b:package bodies;
-				\e:entities;a:architecture specifications;
-				\T:type declarations;p:processes;
-				\f:functions;r:procedures'
-	if !filereadable("Makefile")
-		if (&ft=='verilog')
-			setlocal makeprg=vlog\ %\ $*
-		elseif (&ft=='systemverilog')
-			setlocal makeprg=vlog\ -sv\ %\ $*
-		elseif (&ft=='vhdl')
-			setlocal makeprg=vcom\ %\ $*
-		endif
-	endif
+    setlocal comments=:--
+    setlocal errorformat=\*\*\ %trror:\ %f(%l):\ %m
+    setlocal errorformat+=\*\*\ %tarning:\ %f(%l):\ %m
+    let g:tlist_vhdl_settings='vhdl;d:package declarations;b:package bodies;
+                \e:entities;a:architecture specifications;
+                \T:type declarations;p:processes;
+                \f:functions;r:procedures'
+    if !filereadable("Makefile")
+        if (&ft=='verilog')
+            setlocal makeprg=vlog\ %\ $*
+        elseif (&ft=='systemverilog')
+            setlocal makeprg=vlog\ -sv\ %\ $*
+        elseif (&ft=='vhdl')
+            setlocal makeprg=vcom\ %\ $*
+        endif
+    endif
 endfunction
 au FileType {vhdl,verliog,systemverilog} call VHDL()
 " TEX
@@ -104,45 +104,45 @@ let g:tex_flavor = "latex" " All .tex is latex file
 au FileType bib setlocal ft=tex
 au FileType bib setlocal syntax=bib
 function! TEX()
-	setlocal spell spelllang=en_us
-	setlocal comments=:%
-	setlocal fo+=cr fo-=o
-	setlocal errorformat=%f:%l:\ %m
-	setlocal fde=getline(v:lnum)=
-		\~'^\\s*$'&&getline(v:lnum+1)=~'\\S'?'<1':1
-	let g:tlist_tex_settings = 'latex;s:Sections;l:Labels;
-				\r:Refs;m:Marks;b:Bibs'
+    setlocal spell spelllang=en_us
+    setlocal comments=:%
+    setlocal fo+=cr fo-=o
+    setlocal errorformat=%f:%l:\ %m
+    setlocal fde=getline(v:lnum)=
+        \~'^\\s*$'&&getline(v:lnum+1)=~'\\S'?'<1':1
+    let g:tlist_tex_settings = 'latex;s:Sections;l:Labels;
+                \r:Refs;m:Marks;b:Bibs'
 
-	if !filereadable("Makefile")
-		setlocal makeprg=env\ max_print_line=1000\ 
-					\pdflatex\ -synctex=1\ -interaction=nonstopmode\ 
-					\\-file\-line\-error\ 
-					\--output-dir=build\ $*\ 
-					\\\\|\ vim\-error\-filter
-	endif
-	set errorformat=%f:%l:\ %m
+    if !filereadable("Makefile")
+        setlocal makeprg=env\ max_print_line=1000\ 
+                    \pdflatex\ -synctex=1\ -interaction=nonstopmode\ 
+                    \\-file\-line\-error\ 
+                    \--output-dir=build\ $*\ 
+                    \\\\|\ vim\-error\-filter
+    endif
+    set errorformat=%f:%l:\ %m
 endfunction
 au FileType {tex,bib} call TEX()
 
 
 " -------------------- Auto insert header -------------------------------
 function Insertheader ()
-	"If file exist, copy skeletop
-	let s:fn=expand('%:t')
-	let sftf = $HOME . "/.vim/header/" . s:fn
-	if filereadable( sftf )
-		execute '0r ' . sftf
-		g/StartHere/s/StartHere//g
-		"startinsert
-	else
-		" If only extension exist.
-		let sftf = $HOME . "/.vim/header/_." . &filetype
-		if filereadable( sftf )
-			execute '0r ' . sftf
-			$
-			"startinsert
-		endif
-	endif
+    "If file exist, copy skeletop
+    let s:fn=expand('%:t')
+    let sftf = $HOME . "/.vim/header/" . s:fn
+    if filereadable( sftf )
+        execute '0r ' . sftf
+        g/StartHere/s/StartHere//g
+        "startinsert
+    else
+        " If only extension exist.
+        let sftf = $HOME . "/.vim/header/_." . &filetype
+        if filereadable( sftf )
+            execute '0r ' . sftf
+            $
+            "startinsert
+        endif
+    endif
 endfunction
 autocmd bufnewfile * call Insertheader ()
 
@@ -164,27 +164,33 @@ highlight ColorColumn ctermbg=Black ctermfg=DarkRed
 highlight ExtraWhitespace ctermbg=red guibg=red
 "Check style while writting
 function CheckStyle()
-	set colorcolumn=+1
-	match ExtraWhitespace /\s\+$/
-	autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-	autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-	autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-	autocmd BufWinLeave * call clearmatches()
+    set colorcolumn=+1
+    match ExtraWhitespace /\s\+$/
+    autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+    autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+    autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+    autocmd BufWinLeave * call clearmatches()
 endfunction
 " Check style before public
 function BeforePublic()
-	match ExtraWhitespace /\s\+$\|^\t\+\|!!FILE\|!!DATE\|\* Desc\s*:$/
-	autocmd BufWinLeave * call clearmatches()
+    match ExtraWhitespace /\s\+$\|^\t\+\|!!FILE\|!!DATE\|\* Desc\s*:$/
+    autocmd BufWinLeave * call clearmatches()
 endfunction
 command BeforePublic call BeforePublic()
 " Uncheck style
 function UnCheckStyle()
-	set cc=
-	highlight clear ExtraWhitespace
+    set cc=
+    highlight clear ExtraWhitespace
 endfunction
 command CheckStyle call CheckStyle()
 command UnCheckStyle call UnCheckStyle()
 au FileType {cpp,c,make,sh,vhdl,verilog,systemverilog,tex} call CheckStyle ()
+
+fun ClearTrailingSpace()
+    :%s/\s\+$//g
+endf
+command ClearTrailingSpace call ClearTrailingSpace()
+
 " -----------------------------------------------------------------------
 function! FillLine( str )
     " set tw to the desired total length
@@ -192,12 +198,12 @@ function! FillLine( str )
     if tw==0 | let tw = 80 | endif
     " strip trailing spaces first
     " calculate total number of 'str's to insert
-	let ccl=strlen(getline('.'))
+    let ccl=strlen(getline('.'))
     let reps = (tw - ccl - 1) / len(a:str)
     if reps > 0
         .s/$/\=(' '.repeat(a:str, reps))/
     endif
-	return ""
+    return ""
 endfunction
 command! -nargs=1 FillLine call FillLine(<f-args>)
 
@@ -205,9 +211,9 @@ command! -nargs=1 FillLine call FillLine(<f-args>)
 " Quit Buffer when quit file
 au BufEnter * call MyLastWindow()
 function! MyLastWindow()
-	if &buftype=="quickfix" || &buftype=="nofile"
-		if winbufnr(2) == -1
-			quit!
-		endif
-	endif
+    if &buftype=="quickfix" || &buftype=="nofile"
+        if winbufnr(2) == -1
+            quit!
+        endif
+    endif
 endfunction
