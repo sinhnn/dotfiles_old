@@ -1,51 +1,51 @@
 [submodule "delimitMate"]
-	path = delimitMate
+	path = .vim/bundle/delimitMate
 	url = https://github.com/Raimondi/delimitMate.git
 [submodule "systemverilog.vim"]
-	path = systemverilog.vim
+	path = .vim/bundle/systemverilog.vim
 	url = https://github.com/nachumk/systemverilog.vim
 [submodule "syntastic"]
-	path = syntastic
+	path = .vim/bundle/syntastic
 	url = https://github.com/vim-syntastic/syntastic
 [submodule "vim-surround"]
-	path = vim-surround
+	path = .vim/bundle/vim-surround
 	url = https://github.com/tpope/vim-surround.git
 [submodule "nerdtree"]
-	path = nerdtree
+	path = .vim/bundle/nerdtree
 	url = https://github.com/scrooloose/nerdtree.git
 [submodule "tabular"]
-	path = tabular
+	path = .vim/bundle/tabular
 	url = https://github.com/godlygeek/tabular.git
 [submodule "vim-airline"]
-	path = vim-airline
+	path = .vim/bundle/vim-airline
 	url = https://github.com/vim-airline/vim-airline.git
 [submodule "Conque-GDB"]
-	path = Conque-GDB
+	path = .vim/bundle/Conque-GDB
 	url = https://github.com/vim-scripts/Conque-GDB
 [submodule "DoxygenToolkit.vim"]
-	path = DoxygenToolkit.vim
+	path = .vim/bundle/DoxygenToolkit.vim
 	url = https://github.com/vim-scripts/DoxygenToolkit.vim
 [submodule "vim-gitgutter"]
-	path = vim-gitgutter
+	path = .vim/bundle/vim-gitgutter
 	url = https://github.com/airblade/vim-gitgutter
 [submodule "vim-clang-format"]
-	path = vim-clang-format
+	path = .vim/bundle/vim-clang-format
 	url = https://github.com/rhysd/vim-clang-format
 [submodule "ultisnips"]
-	path = ultisnips
+	path = .vim/bundle/ultisnips
 	url = https://github.com/SirVer/ultisnips
 [submodule "supertab"]
-	path = supertab
+	path = .vim/bundle/supertab
 	url = https://github.com/ervandew/supertab
 [submodule "matchit"]
-	path = matchit
+	path = .vim/bundle/matchit
 	url = https://github.com/tmhedberg/matchit
 [submodule "tagbar"]
-	path = tagbar
+	path = .vim/bundle/tagbar
 	url = https://github.com/majutsushi/tagbar
 [submodule "OmniCppComplete"]
-	path = OmniCppComplete
+	path = .vim/bundle/OmniCppComplete
 	url = https://github.com/vim-scripts/OmniCppComplete
 [submodule "indentLine"]
-	path = indentLine
+	path = .vim/bundle/indentLine
 	url = https://github.com/Yggdroot/indentLine

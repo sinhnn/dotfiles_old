@@ -22,7 +22,7 @@ set tabstop=4
 set shiftwidth=4
 set nofoldenable
 
-" ---------- Developer --------------------------------------------------
+" ---------- Developer  --------------------------------------------------------
 set textwidth=80
 set tags+=build/tags,../tags,tags
 set laststatus=1
@@ -33,41 +33,29 @@ hi Search term=reverse ctermfg=None ctermbg=242 guibg=DarkGrey
 set statusline+=%#warningmsg#
 set statusline+=%*
 set fo+=c fo+=r fo-=o
-" -------------------- Shortcuts --------------------
+"  -----------------------------------------------------------------------------
+
+" -------------------- Shortcuts  ----------------------------------------------
 map <F3> :NERDTreeToggle<CR>
 map <F4> :TagbarToggle<CR>
 nnoremap <F5> :make<bar>cw<CR><CR><CR>
 map <C-S-n> :silent !xterm&<CR><CR>
 map <C-e> :silent cnext <CR><CR>
 let g:UltiSnipsListSnippets="<c-u>"
+let g:author="Ngoc-Sinh Nguyen"
 
-
-
-" -------------------- Pathogen --------------------
+" -------------------- Pathogen  -----------------------------------------------
 let NERDTreeIgnore=['\~$', '^\.git', '\.swp$','\.o']
-" Extra snippets
-"let g:UltiSnipsSnippetsDir="~/.vim/bundle/vim-snippets/snippets/"
-let g:UltiSnipsSnippetsDir="~/.vim/bundle/vim-snippets/snippets/"
-let g:UltiSnipsSnippetDirectories=["UltiSnips", "vim-snippets"]
-let g:UltiSnipsEditSplit="vertical"
-let g:snips_author='Ngoc-Sinh Nguyen'
-let g:DoxygenToolkit_authorName=g:snips_author
-let g:DoxygenToolkit_briefTag_pre="\\brief  "
-let g:DoxygenToolkit_paramTag_pre="\\param "
-let g:DoxygenToolkit_returnTag="\\returns   "
-let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
-let g:DoxygenToolkit_blockFooter="--------------------------------------------------------------------------"
-let g:tagbar_left = 1
-
 execute pathogen#infect()
 execute pathogen#helptags()
 filetype on
 filetype plugin indent on
+" -----------------------------------------------------------------------------
 
 
-
-" -------------------- Make, Error format setup -------------------------------
-" CPP
+" -------------------- Make, Error format setup  -------------------------------
+"
+" CPP  -------------------------------------------------------------------------
 function! CCPP()
     "autocmd BufWritePre,BufRead *.{cpp,c} :silent !${HOME}/.vim/gentags.sh %&
     if !filereadable("Makefile")
@@ -77,17 +65,16 @@ function! CCPP()
             setlocal makeprg=g++\ -c\ -o\ %.o\ %\ $*
         endif
     endif
+	set expandtab "Tab indent to space indent
 endfunction
 au FileType {cpp,c} call CCPP()
-" VHDL
+"  -----------------------------------------------------------------------------
+
+" VHDL  ------------------------------------------------------------------------
 function! VHDL()
     setlocal comments=:--
     setlocal errorformat=\*\*\ %trror:\ %f(%l):\ %m
     setlocal errorformat+=\*\*\ %tarning:\ %f(%l):\ %m
-    let g:tlist_vhdl_settings='vhdl;d:package declarations;b:package bodies;
-                \e:entities;a:architecture specifications;
-                \T:type declarations;p:processes;
-                \f:functions;r:procedures'
     if !filereadable("Makefile")
         if (&ft=='verilog')
             setlocal makeprg=vlog\ %\ $*
@@ -97,9 +84,12 @@ function! VHDL()
             setlocal makeprg=vcom\ %\ $*
         endif
     endif
+	set expandtab "Tab indent to space indent
 endfunction
 au FileType {vhdl,verliog,systemverilog} call VHDL()
-" TEX
+"  -----------------------------------------------------------------------------
+
+" TEX  -------------------------------------------------------------------------
 let g:tex_flavor = "latex" " All .tex is latex file
 au FileType bib setlocal ft=tex
 au FileType bib setlocal syntax=bib
@@ -110,9 +100,6 @@ function! TEX()
     setlocal errorformat=%f:%l:\ %m
     setlocal fde=getline(v:lnum)=
         \~'^\\s*$'&&getline(v:lnum+1)=~'\\S'?'<1':1
-    let g:tlist_tex_settings = 'latex;s:Sections;l:Labels;
-                \r:Refs;m:Marks;b:Bibs'
-
     if !filereadable("Makefile")
         setlocal makeprg=env\ max_print_line=1000\ 
                     \pdflatex\ -synctex=1\ -interaction=nonstopmode\ 
@@ -123,6 +110,7 @@ function! TEX()
     set errorformat=%f:%l:\ %m
 endfunction
 au FileType {tex,bib} call TEX()
+"  -----------------------------------------------------------------------------
 
 
 " -------------------- Auto insert header -------------------------------
